@@ -4,6 +4,8 @@ const path = require("path");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const User = require("./models/user");
+const session = require("express-session");
+
 
 mongoose.connect("mongodb://127.0.0.1:27017/userAuth")
   .then(() => {
@@ -18,6 +20,7 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 app.use(express.urlencoded({ extended: true}));
+app.use(session({secret: "worktimefun"}));
 
 app.get("/", (req,res) => {
   res.send("Goodluck on your capstone, Group 3!");
@@ -38,12 +41,18 @@ app.post("/login", async (req,res) => {
   const user = await User.findOne({username});
   const validPass = await bcrypt.compare(password, user.password);
   if (validPass) {
+    req.session.user_id = user._id;
     res.send(`Welcome back, ${username}!`);
   }
   else {
     res.send("Invalid username or password! Try again.");
   }
 });
+
+app.post("/logout", (req,res) => {
+  req.session.user_id = null;
+  res.redirect("/login");
+})
 
 //  Sign Up
 app.get("/signup", (req,res) => {
@@ -58,10 +67,9 @@ app.post("/signup", async (req,res) => {
     password: hashPw
   })
   await user.save();
+  req.session.user_id = user._id;
   res.redirect("/success");
 })
-
-
 
 app.listen(3000, () => {
   console.log("Listening to PORT 3000..");
