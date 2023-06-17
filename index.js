@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 const User = require("./models/user");
 const session = require("express-session");
 
-
+// This is locally-ran mongo URI. Must be updated to final URI.
 mongoose.connect("mongodb://127.0.0.1:27017/userAuth")
   .then(() => {
     console.log("Connected to Mongo!");
@@ -16,6 +16,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/userAuth")
     console.log(error)
   })
 
+// These next two lines are for EJS templating. Can be removed to give way to React frontend rendering
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
