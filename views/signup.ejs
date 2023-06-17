@@ -7,19 +7,15 @@
 </head>
 <body>
 
-  <h1>Sign Up for a myAsenso&trade; Account</h1>
-  <form>
+  <h1>Sign Up Form</h1>
+  <form accept="/signup" method="POST">
     <div>
-      <label for="fullname">Fullname</label>
-      <input type="text" id="fullname" name="fullname">
-    </div>
-    <div>
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" placeholder="Username">
     </div>
     <div>
       <label for="password">Password</label>
-      <input type="password" id="password" name="password">
+      <input type="password" id="password" name="password" placeholder="Password">
     </div>
     <button type="submit">Sign Up</button>
     <p>Already registered? <a href="/login">Login!</a></p>
