@@ -34,19 +34,19 @@ app.get("/success", (req,res) => {
 // ** ROUTES **
 // Login
 app.get("/login", (req,res) => {
-  res.render("welcome");
+  res.render("welcome"); // EJS render. To be removed later.
 })
 
 app.post("/login", async (req,res) => {
-  const { username, password } = req.body;
-  const user = await User.findOne({username});
+  const { email, password } = req.body;
+  const user = await User.findOne({email});
   const validPass = await bcrypt.compare(password, user.password);
   if (validPass) {
     req.session.user_id = user._id;
-    res.send(`Welcome back, ${username}!`);
+    res.send("You're now logged in! Welcome!");
   }
   else {
-    res.send("Invalid username or password! Try again.");
+    res.send("Invalid email or password! Try again.");
   }
 });
 
@@ -57,14 +57,16 @@ app.post("/logout", (req,res) => {
 
 //  Sign Up
 app.get("/signup", (req,res) => {
-  res.render("signup");
+  res.render("signup"); // EJS render. To be removed later.
 })
 
 app.post("/signup", async (req,res) => {
-  const { username, password} = req.body;
+  const { fullname, email, phone, password} = req.body;
   const hashPw = await bcrypt.hash(password, 12);
   const user = new User({
-    username,
+    fullname,
+    email,
+    phone,
     password: hashPw
   })
   await user.save();
