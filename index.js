@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 const User = require("./models/user");
 const session = require("express-session");
 
-// This is locally-ran mongo URI. Must be updated to final URI.
+// This is a locally-ran mongo URI. Must be updated to final URI.
 mongoose.connect("mongodb://127.0.0.1:27017/userAuth")
   .then(() => {
     console.log("Connected to Mongo!");
@@ -71,7 +71,7 @@ app.post("/signup", async (req,res) => {
   })
   await user.save();
   req.session.user_id = user._id;
-  res.redirect("/success");
+  res.redirect("/login");
 })
 
 app.listen(3000, () => {
