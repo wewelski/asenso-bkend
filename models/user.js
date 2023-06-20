@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import uniqueValidator from "mongoose-unique-validator";
 
 const userSchema = new mongoose.Schema({
   fullname: {
@@ -19,4 +20,17 @@ const userSchema = new mongoose.Schema({
   }
 })
 
-module.exports = mongoose.model("User", userSchema);
+userSchema.plugin(uniqueValidator);
+
+userSchema.set("toJSON", {
+  transform: (_document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString();
+    delete returnedObject._id;
+    delete returnedObject.__V;
+    delete returnedObject.hashPw;
+  }
+});
+
+const User = mongoose.model("User", userSchema);
+
+export default User;

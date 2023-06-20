@@ -1,8 +1,7 @@
 import app from "./app.js";
 import config from "./utils/config.js";
 import bcrypt from "bcrypt";
-import User from "./models/user.js";
-const session = require("express-session");
+import User from "./models/User.js";
 
 // This is a locally-ran mongo URI. Must be updated to final URI.
 // mongoose.connect("config.MONGODB_URI");
@@ -27,7 +26,7 @@ app.get("/", (_req,res) => {
 
 /* Login */
 app.get("/login", (_req,res) => {
-  res.render("welcome"); // EJS render. To be removed later.
+  res.render("login"); // EJS render. To be removed later.
 })
 
 app.post("/login", async (req,res) => {
@@ -49,11 +48,11 @@ app.post("/logout", (req,res) => {
 })
 
 /* Sign Up */
-app.get("/signup", (req,res) => {
+app.get("/register", (req,res) => {
   res.render("signup"); // EJS render. To be removed later.
 })
 
-app.post("/signup", async (req,res) => {
+app.post("/register", async (req,res) => {
   const { fullname, email, phone, password} = req.body;
   const hashPw = await bcrypt.hash(password, 12);
   const user = new User({
@@ -63,7 +62,6 @@ app.post("/signup", async (req,res) => {
     password: hashPw
   })
   await user.save();
-  req.session.user_id = user._id;
   res.redirect("/login");
 })
 
