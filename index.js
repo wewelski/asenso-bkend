@@ -1,39 +1,32 @@
-const express = require("express");
-const app = express();
-const path = require("path");
-const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
-const User = require("./models/user");
+import app from "./app.js";
+import config from "./utils/config.js";
+import bcrypt from "bcrypt";
+import User from "./models/user.js";
 const session = require("express-session");
 
 // This is a locally-ran mongo URI. Must be updated to final URI.
-mongoose.connect("mongodb://127.0.0.1:27017/userAuth")
-  .then(() => {
-    console.log("Connected to Mongo!");
-  })
-  .catch(error => {
-    console.log("Connection ERROR!");
-    console.log(error)
-  })
+// mongoose.connect("config.MONGODB_URI");
+//   .then(() => {
+//     console.log("Connected to Mongo Server!");
+//   })
+//   .catch(error => {
+//     console.log("Connection ERROR!");
+//     console.log(error)
+//   })
 
-// These next two lines are for EJS templating. Can be removed to give way to React frontend rendering
-app.set("views", path.join(__dirname, "views"));
+/* This line is for rendering purpose only during development */
 app.set("view engine", "ejs");
 
 app.use(express.urlencoded({ extended: true}));
 app.use(session({secret: "worktimefun"}));
 
-app.get("/", (req,res) => {
+/* Routes */
+app.get("/", (_req,res) => {
   res.send("Goodluck on your capstone, Group 3!");
 })
 
-app.get("/success", (req,res) => {
-  res.send("Registered! You can now login!");
-})
-
-// ** ROUTES **
-// Login
-app.get("/login", (req,res) => {
+/* Login */
+app.get("/login", (_req,res) => {
   res.render("welcome"); // EJS render. To be removed later.
 })
 
@@ -55,7 +48,7 @@ app.post("/logout", (req,res) => {
   res.redirect("/login");
 })
 
-//  Sign Up
+/* Sign Up */
 app.get("/signup", (req,res) => {
   res.render("signup"); // EJS render. To be removed later.
 })
@@ -74,6 +67,6 @@ app.post("/signup", async (req,res) => {
   res.redirect("/login");
 })
 
-app.listen(3000, () => {
-  console.log("Listening to PORT 3000..");
+app.listen(config.PORT, () => {
+  console.log(`Listening to PORT ${config.PORT}`);
 })
